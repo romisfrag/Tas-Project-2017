@@ -1,20 +1,4 @@
-(* --------------------------- Types definitions -----------------------*)
-
-type typ =
-  | TVar of string
-  | Arrow of typ * typ
-                     
-type term =
-  | Var of int
-  | Abs of string * term
-  | Appl of term * term
-                     
-type contexte =
-  typ list
-
-type substitution =
-  (string * typ) list
-    
+open Types
       
 (* -------------------------- utility functions ------------------------ *)
 
@@ -76,9 +60,11 @@ let rec type_equal (ty1 : typ) (ty2 : typ) : bool =
            
 (* -------------------------- Type checker -------------------- *)
 
-let rec type_check_rec (ter : term) (c : contexte) : (typ*substitution) option =
+let rec type_check_rec (ter : term) (c : contexte) : (typ*substitution*proofTree) option =
   match ter with
-  | Var n -> (try Some ((List.nth c n) , []) with 
+  | Var n -> (try let retTy = List.nth c n in
+                  let 
+                  Some (retTy, []) with 
               | _ -> failwith "typeCheck Error : you must haven't give a close term")
                
   | Abs (name,st) -> let freshType = TVar (gensym ()) in

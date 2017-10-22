@@ -1,2 +1,0 @@
-resultat 
- \frac{\emptyset\vdash\lambda x.\lambda y.(y \ x):(Alpha\rightarrow ((alpha\rightarrow alpha)\rightarrow alpha))}{\emptyset\vdash\lambda x.\lambda y.(y \ x):(Alpha\rightarrow ((alpha\rightarrow alpha)\rightarrow alpha))} 

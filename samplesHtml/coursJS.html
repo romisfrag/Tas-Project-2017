@@ -2,8 +2,10 @@
 <html>
   <head>
     <meta charset="utf-8">
-
-    <title>Number guessing game</title>
+    <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <title>Type Printer 2.0</title>
 
     <style>
       html {
@@ -25,38 +27,32 @@
   </head>
 
   <body>
-      <h1>Number guessing game</h1>
+      <h1>Type Printer</h1>
 
-      <p>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.</p>
+      <div class="mainscreen">
+      </div> 
+      
+      <p>This is a test page to my TAS project</p>
 
 <div class="form">
-  <label for="guessField">Enter a guess: </label><input type="text" id="guessField" class="guessField">
+  <label for="termField">Enter a term and we will type Check it </label><input type="text" id="terminpute" class="termField">
   <input type="submit" value="Submit guess" class="guessSubmit">
-</div>
-
-<div class="resultParas">
-  <p class="guesses"></p>
-  <p class="lastResult"></p>
-  <p class="lowOrHi"></p>
 </div>
 
 <script>
 
-  var randomNumber = Math.floor(Math.random() * 100) + 1;
   
-  var guesses = document.querySelector('.guesses');
-  var lastResult = document.querySelector('.lastResult');
-  var lowOrHi = document.querySelector('.lowOrHi');
-  
+  var mainscreen = document.querySelector('.mainscreen');
+  var termField = document.querySelector('.termField');
   var guessSubmit = document.querySelector('.guessSubmit');
-  var guessField = document.querySelector('.guessField');
-  
-  var guessCount = 1;
-  var resetButton;
 
-  function checkGuess() {
-  alert('I am a placeholder');
+  function termSubmit(){
+  alert("It s a test");
+  mainscreen.innerHTML += "$$\\vdash$$";
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);  
   }
+  
+  guessSubmit.addEventListener('click', termSubmit);
   
 </script>
 </body>

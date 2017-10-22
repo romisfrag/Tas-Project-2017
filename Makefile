@@ -1,4 +1,4 @@
-all : type_checker
+all : main
 
 
 type :
@@ -8,6 +8,11 @@ type :
 type_checker : type
 	ocamlbuild -use-ocamlfind typeChecker.native
 
+treePrinter : type
+	ocamlbuild -use-ocamlfind treePrinter.native
+
+main : type_checker treePrinter
+	ocamlbuild -use-ocamlfind main.native
 
 clean: 
 	ocamlbuild -clean

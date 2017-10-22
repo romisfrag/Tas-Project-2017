@@ -15,9 +15,11 @@ type contexte =
 type substitution =
   (string * typ) list
 
-
+type environment =
+  (string * term) list
+                 
 type goal =
-  { env : (string * term) list ;
+  { env :  environment;
     ter : term ;
     ty : typ }
 

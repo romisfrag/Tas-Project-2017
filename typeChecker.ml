@@ -60,30 +60,30 @@ let rec type_equal (ty1 : typ) (ty2 : typ) : bool =
            
 (* -------------------------- Type checker -------------------- *)
 
-let rec type_check_rec (ter : term) (c : contexte) : (typ*substitution*proofTree) option =
-  match ter with
-  | Var n -> (try let retTy = List.nth c n in
-                  let 
-                  Some (retTy, []) with 
-              | _ -> failwith "typeCheck Error : you must haven't give a close term")
+(* let rec type_check_rec (ter : term) (c : contexte) : (typ*substitution*proofTree) option = *)
+(*   match ter with *)
+(*   | Var n -> (try let retTy = List.nth c n in *)
+(*                   let  *)
+(*                   Some (retTy, []) with  *)
+(*               | _ -> failwith "typeCheck Error : you must haven't give a close term") *)
                
-  | Abs (name,st) -> let freshType = TVar (gensym ()) in
-                     bind (type_check_rec st (freshType :: c))
-                          (fun (ty2,sub) -> Some (Arrow (substitute freshType sub, ty2),sub))
+(*   | Abs (name,st) -> let freshType = TVar (gensym ()) in *)
+(*                      bind (type_check_rec st (freshType :: c)) *)
+(*                           (fun (ty2,sub) -> Some (Arrow (substitute freshType sub, ty2),sub)) *)
                           
-  | Appl (st1,st2) -> let freshName = gensym () in                      
-                      bind (type_check_rec st1 c)
-                           (fun (ty1,sub) ->
-                             let newCtxt = List.map (fun elem -> substitute elem sub) c in
-                             bind (type_check_rec st2 newCtxt)
-                                  (fun (ty2,sub2) ->
-                                    let unification = unify (Arrow (ty2, TVar(freshName))) (substitute ty1 sub2) in
-                                    let resType = try List.assoc freshName unification with _ -> TVar freshName in
-                                    Some (resType, (compsubst unification (compsubst sub2 sub)))))
+(*   | Appl (st1,st2) -> let freshName = gensym () in                       *)
+(*                       bind (type_check_rec st1 c) *)
+(*                            (fun (ty1,sub) -> *)
+(*                              let newCtxt = List.map (fun elem -> substitute elem sub) c in *)
+(*                              bind (type_check_rec st2 newCtxt) *)
+(*                                   (fun (ty2,sub2) -> *)
+(*                                     let unification = unify (Arrow (ty2, TVar(freshName))) (substitute ty1 sub2) in *)
+(*                                     let resType = try List.assoc freshName unification with _ -> TVar freshName in *)
+(*                                     Some (resType, (compsubst unification (compsubst sub2 sub))))) *)
 
 
 
                            
-let type_check (ter : term) : typ option =
-  bind (type_check_rec ter [])
-       (fun (ty,sub) -> Some ty)
+(* let type_check (ter : term) : typ option = *)
+(*   bind (type_check_rec ter []) *)
+(*        (fun (ty,sub) -> Some ty) *)

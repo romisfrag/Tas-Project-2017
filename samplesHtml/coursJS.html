@@ -46,13 +46,22 @@
   var termField = document.querySelector('.termField');
   var guessSubmit = document.querySelector('.guessSubmit');
 
-  function termSubmit(){
-  alert("It s a test");
-  mainscreen.innerHTML += "$$\\vdash$$";
-  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);  
-  }
   
+  //function to import from 
+  function termSubmit(){
+  mainscreen.innerHTML += "$$\\vdash$$\n";
+  mainscreen.innerHTML += termField.value
+  }
+
+  //function to force the parse of latex style
+  function refresh(){
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+  }
+
+  //adding the listener of the submit button
   guessSubmit.addEventListener('click', termSubmit);
+  guessSubmit.addEventListener('click', refresh);
+  
   
 </script>
 </body>

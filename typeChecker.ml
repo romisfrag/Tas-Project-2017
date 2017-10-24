@@ -120,6 +120,7 @@ let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substituti
                             let g = {ctxt = c; ter = Abs(name,st); ty = newType} in 
                             let tree = Node [(g,retTree)] in
                             Some (newType,sub,tree))
+                          
   | _ -> failwith "lol"
                         
        

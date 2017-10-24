@@ -15,8 +15,9 @@ let () =
   let () = Printf.printf "This is your term: \n %s \n" (term_to_latex t) in
   match type_check_with_tree t [] with
   |Some (t,s,p) ->
-         let res1 = print_proof_tree p in
-         Printf.printf "resultat \n %s \n" res1
+    let () = Printf.printf "This is your type: \n %s \n" (typ_to_latex t) in
+    let res1 = print_proof_tree p in
+    Printf.printf "resultat \n %s \n" res1
   |None -> ()
 
 

@@ -116,11 +116,10 @@ let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substituti
   | Abs (name,st) -> let freshType = TVar (gensym ()) in
                      bind (type_check_with_tree st ((name, freshType) :: c))
                           (fun (ty2,sub,retTree) ->
-                            let g = 
-                            let tree =
-
-
-                              Some (Arrow (substitute freshType sub, ty2),sub))    
+                            let newType = Arrow (substitute freshType sub, ty2) in
+                            let g = {ctxt = c; ter = Abs(name,st); ty = newType} in 
+                            let tree = Node [(g,retTree)] in
+                            Some (newType,sub,tree))
   | _ -> failwith "lol"
                         
        

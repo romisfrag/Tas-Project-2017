@@ -1,1 +1,2 @@
-$\frac{\emptyset\vdash\lambda x.\lambda y.(y \ x):(Alpha\rightarrow ((alpha\rightarrow alpha)\rightarrow alpha))}{\emptyset\vdash\lambda x.\lambda y.(y \ x):(Alpha\rightarrow ((alpha\rightarrow alpha)\rightarrow alpha))}$
+resultat 
+ \frac{\frac{y:V2;x:V1;\emptyset\vdash x:V1}{x:V1;\emptyset\vdash \lambda y.x:(V2\rightarrow V1)} \quad \quad}{\emptyset\vdash \lambda x.\lambda y.x:(V1\rightarrow (V2\rightarrow V1))} \quad \quad 

@@ -45,13 +45,27 @@ let compsubst (s1 : substitution) (s2 : substitution) : substitution =
   (List.map (fun (name,ty) -> (name,substitute ty s2)) s1) @ s2
              
 
+let occur (v : string) (t : typ) : bool = 
+  let rec occ_rec (t : typ) : bool =
+    match t with 
+      TVar b -> b=v
+    | Arrow(oT1,oT2) -> occ_rec oT1 || occ_rec oT2
+  in occ_rec t
+                                                               
 (* this function find the substitution betwen two types *)
 let rec unify (ty1 : typ) (ty2 : typ) : substitution =
   match (ty1,ty2) with
-  | (TVar a, _) -> [(a,ty2)]
-  | (_,TVar a) -> [(a,ty1)]
-  | (Arrow (ty11,ty12),Arrow (ty21,ty22)) -> unify ty11 ty21 @ unify ty12 ty22
-
+  | (TVar a, ty2) -> if ty1 = ty2 then []
+                   else if occur a ty2 then failwith "Unfiy fail"
+                   else [a,ty2]
+  | (ty1,TVar a) -> if ty1 = ty2 then []
+                   else if occur a ty1 then failwith "Unfiy fail"
+                   else [a,ty1]
+  | (Arrow (ty11,ty12),Arrow (ty21,ty22)) ->
+     let s=unify ty11 ty21  in
+          compsubst (unify (substitute ty12 s)
+                             (substitute ty22 s)) s
+                                                                     
                                                              
 let rec type_equal (ty1 : typ) (ty2 : typ) : bool =
   match (ty1,ty2) with

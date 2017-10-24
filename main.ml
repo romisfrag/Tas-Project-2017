@@ -26,8 +26,8 @@ let () =
     let () = Printf.printf "This is your type: \n %s \n" (typ_to_latex t) in
     let () = Printf.printf "This is your substitution \n %s \n" (print_substitution s) in
     let res1 = print_proof_tree p in
-    let oc = open_out file in    (* create or truncate file, return channel *)
-    Printf.fprintf oc "%s\n" res1;   (* write something *)   
+    let oc = open_out file in    
+    Printf.fprintf oc "%s\n" res1;
     close_out oc;
     Printf.printf "resultat \n %s \n" res1
   |None -> ()

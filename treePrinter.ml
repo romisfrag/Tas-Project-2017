@@ -7,8 +7,8 @@ let rec term_to_latex_rec (t : term) (contexte : named_contexte) : string =
   | Abs (name,st) -> "\\lambda " ^ name ^ "." ^ term_to_latex_rec st ((name,TVar "bidon") :: contexte)
   | Appl (st1,st2) -> "(" ^ term_to_latex_rec st1 contexte ^ " \\ " ^ term_to_latex_rec st2 contexte ^ ")"
 
-(* let term_to_latex (t : term) : string = *)
-(*   term_to_latex_rec t [] *)
+let term_to_latex (t : term) : string =
+  term_to_latex_rec t []
 
                                                                                                
 let rec typ_to_latex (ty : typ) : string =

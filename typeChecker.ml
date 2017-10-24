@@ -94,7 +94,8 @@ let type_check (ter : term) : typ option =
 
 (* functions that manipulate the tree *)
 let substitute_in_goal (g : goal) (s : substitution) : goal =
-  {ctxt = g.ctxt; ter = g.ter; ty = substitute g.ty s}
+  let newCtxt = List.map (fun (name,elem) -> (name,substitute elem s)) g.ctxt in
+  {ctxt = newCtxt; ter = g.ter; ty = substitute g.ty s}
 
        
 let rec substitute_in_tree (t : proofTree) (s : substitution) : proofTree =
@@ -106,7 +107,10 @@ let rec substitute_in_tree (t : proofTree) (s : substitution) : proofTree =
                  | pT :: next -> substitute_in_tree pT s :: sub_rec next)
                    in let newG = substitute_in_goal g s in
                       Node (newG, sub_rec li)
-       
+
+
+
+                           
 let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substitution*proofTree) option =
   match ter with
   | Var n -> (try let (name,retTy) = List.nth c n in
@@ -145,5 +149,5 @@ let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substituti
                         )
 
                           
-                        
+
        

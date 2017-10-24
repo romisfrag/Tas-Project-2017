@@ -30,13 +30,14 @@ let print_goal (g : goal) : string =
 let rec print_proof_tree (p : proofTree) : string =
   match p with
   | Leaf g -> print_goal g
-  | Node l  -> let rec print_liste_tree l =
+  | Node (g,l)  -> let rec print_liste_tree l =
                  match l with
                  | [] -> ""
-                 | (g,pt) :: next -> "\\frac{" ^ print_proof_tree pt ^ "}{" ^ print_goal g ^ "} \\quad \\quad"
-                                     ^ print_liste_tree next
+                 | pt :: next -> print_proof_tree pt ^ "\\quad \\quad" ^ print_liste_tree next
+                                   
+                                     
                in
-               print_liste_tree l 
+               "\\frac{" ^  print_liste_tree l ^ "}{" ^ print_goal g ^ "}"
 
 
 

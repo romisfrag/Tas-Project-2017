@@ -11,4 +11,7 @@ let onload _ =
     Js.Opt.get (d##getElementById (Js.string "wiki_demo"))
       (fun () -> assert false) in
   let textbox = Html.createTextarea d in
+  let preview = Html.createDiv d in
+  let b = Dom_html.createInput ~_type:button_type doc in
+  b##.value := Js_String "lol";
   ()

@@ -12,23 +12,21 @@ type term =
 type contexte =
   typ list
 
+type named_contexte =
+  (string * typ) list
+
 type substitution =
   (string * typ) list
 
-type environment =
-  (string * term) list
                  
 type goal =
-  { env :  environment;
+  { ctxt :  named_contexte;
     ter : term ;
     ty : typ }
 
 
-type goals =
-  | One of goal
-  | Two of (goal * goal)
     
 type proofTree =
-  | Leaf of goals
-  | Node of (goals * proofTree)
+  | Leaf of goal
+  | Node of (goal * proofTree) list
 

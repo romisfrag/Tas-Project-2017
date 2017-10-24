@@ -14,14 +14,16 @@ type_checker : type
 treePrinter : type
 	ocamlbuild -use-ocamlfind treePrinter.native
 
-arbresSamples : type
-	ocamlbuild -use-ocamlfind arbresSamples.native
 
-script : type_checker treePrinter arbresSamples
-	ocamlbuild -use-ocamlfind script.native
+script : type_checker treePrinter 
+	ocamlfind ocamlc -package js_of_ocaml -package js_of_ocaml.syntax \
+          -syntax camlp4o -linkpkg -o script.byte script.ml
+	js_of_ocaml script.byte
 
 main : type_checker treePrinter parser
 	ocamlbuild -use-ocamlfind main.native
 
 clean: 
 	ocamlbuild -clean
+	rm script.cmi script.cmo script.byte script.byte script.js
+

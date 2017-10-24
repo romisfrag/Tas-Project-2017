@@ -28,5 +28,5 @@ type goal =
     
 type proofTree =
   | Leaf of goal
-  | Node of (goal * proofTree) list
+  | Node of goal*(proofTree list)
 

@@ -100,11 +100,12 @@ let substitute_in_goal (g : goal) (s : substitution) : goal =
 let rec substitute_in_tree (t : proofTree) (s : substitution) : proofTree =
   match t with
   | Leaf g -> Leaf (substitute_in_goal g s)                   
-  | Node li -> let rec sub_rec (l : (goal * proofTree) list) : (goal * proofTree) list =
+  | Node (g,li) -> let rec sub_rec (l : proofTree list) : proofTree list =
                  (match l with
                  | [] -> []
-                 | (g,pT) :: next -> (substitute_in_goal g s, substitute_in_tree pT s) :: sub_rec next)
-               in Node (sub_rec li)
+                 | pT :: next -> substitute_in_tree pT s :: sub_rec next)
+                   in let newG = substitute_in_goal g s in
+                      Node (newG, sub_rec li)
        
 let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substitution*proofTree) option =
   match ter with
@@ -118,9 +119,31 @@ let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substituti
                           (fun (ty2,sub,retTree) ->
                             let newType = Arrow (substitute freshType sub, ty2) in
                             let g = {ctxt = c; ter = Abs(name,st); ty = newType} in 
-                            let tree = Node [(g,retTree)] in
+                            let tree = Node (g,[substitute_in_tree retTree sub]) in
                             Some (newType,sub,tree))
+  | Appl(t1,t2) -> let resT1 = type_check_with_tree t1 c in
+                   bind (resT1)
+                        (fun (typT1,sub1,retTree1) ->
+                          let newCtxt = List.map (fun (name,elem) -> (name,substitute elem sub1)) c in
+                          let resT2 = type_check_with_tree t2 newCtxt in
+                          bind (resT2)
+                               (fun (typT2,sub2,retTree2) ->
+                                 bind (type_check_with_tree t2 newCtxt)
+                                      (fun (typT2,sub2,retTree2) ->
+                                        let freshName = gensym () in
+                                        let subUnif = unify (Arrow (typT2, TVar(freshName))) (substitute typT1 sub2) in
+                                        let resType = try List.assoc freshName subUnif with _ -> TVar freshName in
+                                        let newSub = compsubst subUnif (compsubst sub2 sub1) in
+                                        (* Now constructing the tree node *)
+                                        let g = {ctxt = c; ter = Appl(t1,t2); ty = resType} in
+                                        let newTree1 = substitute_in_tree retTree1 newSub in
+                                        let newTree2 = substitute_in_tree retTree2 newSub in
+                                        let resTree = Node (g,[newTree1;newTree2]) in
+                                        Some (resType,newSub,resTree)
+                                      )
+                               )
+                        )
+
                           
-  | _ -> failwith "lol"
                         
        

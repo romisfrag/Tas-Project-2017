@@ -15,9 +15,8 @@ treePrinter : type
 	ocamlbuild -use-ocamlfind treePrinter.native
 
 
-script : type_checker treePrinter 
-	ocamlfind ocamlc -I _build -package js_of_ocaml -package js_of_ocaml.ppx \
-          -linkpkg -o script.byte script.ml
+script : type_checker treePrinter parser type
+	ocamlbuild -use-ocamlfind script.byte
 	js_of_ocaml script.byte
 
 main : type_checker treePrinter parser
@@ -25,5 +24,5 @@ main : type_checker treePrinter parser
 
 clean: 
 	ocamlbuild -clean
-	rm script.cmi script.cmo script.byte script.byte script.js
+	rm *.cmi *.cmo *.byte *.js
 

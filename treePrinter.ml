@@ -33,7 +33,7 @@ let rec print_proof_tree (p : proofTree) : string =
   | Node (g,l)  -> let rec print_liste_tree l =
                  match l with
                  | [] -> ""
-                 | pt :: next -> print_proof_tree pt ^ "\\quad \\quad" ^ print_liste_tree next
+                 | pt :: next -> print_proof_tree pt ^ "\\quad \\quad " ^ print_liste_tree next
                                    
                                      
                in

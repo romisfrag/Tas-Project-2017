@@ -1,28 +1,35 @@
 (* --------------------------- Types definitions -----------------------*)
 
+type var_type_name = string
+
 type typ =
-  | TVar of string
+  | TVar of var_type_name
   | Arrow of typ * typ
+
+type sigma =
+  | Typ of typ
+  | Forall of var_type_name * sigma
                      
 type term =
   | Var of int
   | Abs of string * term
   | Appl of term * term
+  | Let of string * term * term
                      
 type contexte =
-  typ list
+  sigma list
 
 type named_contexte =
-  (string * typ) list
+  (string * sigma) list
 
 type substitution =
-  (string * typ) list
+  (string * sigma) list
 
                  
 type goal =
   { ctxt :  named_contexte;
     ter : term ;
-    ty : typ }
+    ty : sigma }
 
 
     

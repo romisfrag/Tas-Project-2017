@@ -1,4 +1,4 @@
-all : script
+all : add
 
 
 anex :

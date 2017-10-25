@@ -18,7 +18,7 @@ let parse_check_return (s : string) : string  =
 
 (* We now export the function *)
 let _ =
-  Js.export "typeur"
+  Js.export "obj_typeur"
             (object%js
                method start_type s = parse_check_return s
              end)

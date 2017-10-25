@@ -3,10 +3,64 @@
 	  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>Realtime wiki syntax parsing</title>
+
+    
+    <title>Who wan't some TAS</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <script type="text/javascript" src="script.js"></script>
+    
+    <script type="text/javascript" async
+	    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    
   </head>
-  <body id="wiki_demo">
-  </body>
+
+ <body>
+      <h1>Type Printer</h1>
+
+      <div class="mainscreen">
+      </div> 
+      
+      <p>This is a test page to my TAS project</p>
+
+<div class="form">
+  <label for="termField">Enter a term and we will type Check it </label><input type="text" id="terminpute" class="termField">
+  <input type="submit" value="Submit guess" class="guessSubmit">
+</div>
+
+<script>
+
+  
+  var mainscreen = document.querySelector('.mainscreen');
+  var termField = document.querySelector('.termField');
+  var guessSubmit = document.querySelector('.guessSubmit');
+
+  
+  //function to import from 
+  function termSubmit(){
+
+  var arg = termField.value;
+  
+  var res = (obj_typeur.start_type());
+  
+  mainscreen.innerHTML += res;
+  }
+
+  //function to force the parse of latex style
+  function refresh(){
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+  }
+
+  //adding the listener of the submit button
+  guessSubmit.addEventListener('click', termSubmit);
+  guessSubmit.addEventListener('click', refresh);
+  
+  
+</script>
+</body>
+
+
+  
 </html>

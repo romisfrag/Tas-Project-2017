@@ -15,6 +15,9 @@ let rec parse_term_rec (env : string list) (t : Sexplib.Sexp.t) : term =
   (*Abstraction rule *)
   | Sexp.List [Sexp.Atom "lambda"; Sexp.Atom var; body] ->
      Abs(var,(parse_term_rec (var :: env)) body)
+  (* let rule *)
+  | Sexp.List [Sexp.Atom "let"; Sexp.Atom var; Sexp.Atom "="; body1; Sexp.Atom "in"; body2] ->
+     Let(var,(parse_term_rec env body1),(parse_term_rec (var :: env) body2))
   (* Application rule *)
   | Sexp.List (f :: args) ->
      List.fold_left

@@ -16,8 +16,8 @@ treePrinter : type
 
 
 script : type_checker treePrinter 
-	ocamlfind ocamlc -package js_of_ocaml -package js_of_ocaml.syntax \
-          -syntax camlp4o -linkpkg -o script.byte script.ml
+	ocamlfind ocamlc -I _build -package js_of_ocaml -package js_of_ocaml.ppx \
+          -linkpkg -o script.byte script.ml
 	js_of_ocaml script.byte
 
 main : type_checker treePrinter parser

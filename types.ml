@@ -32,7 +32,7 @@ type substitutionSigma =
 type goal =
   { ctxt :  named_contexte;
     ter : term ;
-    ty : typ }
+    ty : sigma }
 
 
     

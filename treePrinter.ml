@@ -6,7 +6,8 @@ let rec term_to_latex_rec (t : term) (contexte : named_contexte) : string =
   | Var n -> let (name,ty) = List.nth contexte n in name
   | Abs (name,st) -> "\\lambda " ^ name ^ "." ^ term_to_latex_rec st ((name,Typ (TVar "bidon")) :: contexte)
   | Appl (st1,st2) -> "(" ^ term_to_latex_rec st1 contexte ^ " \\ " ^ term_to_latex_rec st2 contexte ^ ")"
-  | Let(name,st1,st2) -> failwith "lol"
+  | Let(name,st1,st2) -> "Let \\ " ^ name ^ " = " ^ term_to_latex_rec st1 contexte ^
+                           " \\ in \\ " ^ term_to_latex_rec st2 ((name,Typ (TVar "bidon")) :: contexte)
 
 let term_to_latex (t : term) : string =
   term_to_latex_rec t []

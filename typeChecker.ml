@@ -32,8 +32,12 @@ let rec map_on_Typ (ty : typ) (f : string -> typ) : typ =
 
 
 (* substitution over types *)
-let substitute (ty : typ) (s : substitution) : typ =
-  map_on_Typ ty (fun name -> try (List.assoc name s) with _ -> TVar name)
+(* let substitute (ty : typ) (s : substitution) : typ = *)
+(*   map_on_Typ ty (fun name -> try (List.assoc name s) with _ -> TVar name) *)
+             
+let rec substitute (ty : typ) (s : substitution) : typ =
+  let res = map_on_Typ ty (fun name -> try (List.assoc name s) with _ -> TVar name) in
+  if res = ty then res else substitute res s 
           
 (* concatenation of substitution *)
 (* we first apply all the substitution of s2 over s1 before concatenation *)
@@ -147,11 +151,13 @@ let rec type_check_rec (ter : term) (c : contexte) : (typ*substitution) option =
   (* Only seeking the var in the environment *)
   | Var n -> (try let retTy = instanciate (List.nth c n) in                  
                   Some (retTy, []) with
-              | _ -> failwith "typeCheck Error : you must haven't give a close term")              
+              | _ -> failwith "typeCheck Error : you must haven't give a close term")
+               
   | Abs (name,st) -> let freshType = (TVar (gensym ())) in
                      bind (type_check_rec st (Typ (freshType) :: c))
                           (fun (ty2,sub) ->
-                            Some (Arrow (substitute freshType sub, ty2),sub))                          
+                            Some (Arrow (substitute freshType sub, ty2),sub))
+                          
   | Appl (st1,st2) -> let freshName = gensym () in
                       bind (type_check_rec st1 c)
                            (fun (ty1,sub) ->
@@ -161,7 +167,13 @@ let rec type_check_rec (ter : term) (c : contexte) : (typ*substitution) option =
                                     let unification = unify (Arrow (ty2, TVar(freshName))) (substitute ty1 sub2) in
                                     let resType = try List.assoc freshName unification with _ -> TVar freshName in
                                     Some (resType, (compsubst unification (compsubst sub2 sub)))))
-  | _ -> failwith "lol"
+                           
+  | Let(name,st1,st2) -> bind (type_check_rec st1 c)
+                              (fun (ty1,sub) ->
+                                let genTy1 = generalyze ty1 c in
+                                type_check_rec st2 (genTy1 :: c))
+                                
+                                                
 
 
 

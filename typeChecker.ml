@@ -248,9 +248,16 @@ let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substituti
 
                            
   | Let(name,st1,st2) -> bind (type_check_with_tree st1 c)
-                              (fun (ty1,sub,retTree) ->
+                              (fun (ty1,sub1,retTree1) ->
                                 let genTy1 = generalyze ty1 (named_ctxt_to_ctxt c) in
-                                type_check_with_tree st2 ((name,genTy1) :: c))
+                                bind (type_check_with_tree st2 ((name,genTy1) :: c))
+                                     (fun (ty2,sub2,retTree2) ->
+                                       (* typing is over but we need to make the tree *)
+                                       let g = {ctxt = c; ter = Let(name,st1,st2); ty = Typ ty2} in
+                                       let newTree1 = substitute_in_tree retTree1 sub1 in
+                                       let newTree2 = substitute_in_tree retTree2 sub2 in
+                                       let resTree = Node (g,[newTree1;newTree2]) in
+                                       Some (ty2,sub2,resTree)))
 
 
 

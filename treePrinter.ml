@@ -21,7 +21,7 @@ let rec typ_to_latex (ty : typ) : string =
 let rec sigma_to_latex (s : sigma) : string =
   match s with
   | Typ t -> typ_to_latex t
-  | Forall(name,ss) -> "\\forall " ^ name ^ ":" ^ sigma_to_latex ss
+  | Forall(name,ss) -> "\\forall " ^ name ^ "." ^ sigma_to_latex ss
                
                                                                                        
 

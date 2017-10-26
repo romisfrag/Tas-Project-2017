@@ -87,7 +87,7 @@ let rec instanciate_rec (si : sigma) (sub : substitution) : typ =
   | Forall(name,s) -> let freshVar = TVar (gensym()) in instanciate_rec s ((name,freshVar) :: sub)
 let instanciate (si : sigma) : typ =
   instanciate_rec si []
-
+ 
 (* generalization definition *)
 let rec generalyze (ty : typ) (c : contexte) : sigma =
   let vars = get_var_type ty in

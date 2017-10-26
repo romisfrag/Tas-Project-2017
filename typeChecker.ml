@@ -102,6 +102,8 @@ let rec generalyze (ty : typ) (c : contexte) : sigma =
     | [] -> Typ ty
     | s :: next -> Forall(s,generalyze_rec ty next)) in
   generalyze_rec ty varToGeneralyze
+                 
+
     
 
 
@@ -202,7 +204,10 @@ let rec substitute_in_tree (t : proofTree) (s : substitution) : proofTree =
 
 
 
-
+let rec named_ctxt_to_ctxt (nc : named_contexte) : contexte =
+  match nc with
+  | [] -> []
+  | (name,t) :: next  -> t :: named_ctxt_to_ctxt next
 
 
 let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substitution*proofTree) option =
@@ -217,65 +222,37 @@ let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substituti
 
                
   | Abs (name,st) -> let freshType = (TVar (gensym ())) in
-                     bind (type_check_rec st (Typ (freshType) :: c))
-                          (fun (ty2,sub) ->
-                            Some (Arrow (substitute freshType sub, ty2),sub))
-                          
-  | Appl (st1,st2) -> let freshName = gensym () in
-                      bind (type_check_rec st1 c)
-                           (fun (ty1,sub) ->
-                             let newCtxt = List.map (fun elem -> substitute_sigma elem sub) c in
-                             bind (type_check_rec st2 newCtxt)
-                                  (fun (ty2,sub2) ->
-                                    let unification = unify (Arrow (ty2, TVar(freshName))) (substitute ty1 sub2) in
-                                    let resType = try List.assoc freshName unification with _ -> TVar freshName in
-                                    Some (resType, (compsubst unification (compsubst sub2 sub)))))
-                           
-  | Let(name,st1,st2) -> bind (type_check_rec st1 c)
-                              (fun (ty1,sub) ->
-                                let genTy1 = generalyze ty1 c in
-                                type_check_rec st2 (genTy1 :: c))
-
-
-
-                           
-                           
-let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substitution*proofTree) option =
-  match ter with
-  | Var n -> (try let (name,retTy) = List.nth c n in
-                  let g = {ctxt = c; ter = Var n; ty = retTy} in
-                  let tree = Leaf g in
-                  Some (retTy, [],tree) with
-              | _ -> failwith "typeCheck Error : you must haven't give a close term")
-  | Abs (name,st) -> let freshType = TVar (gensym ()) in
-                     bind (type_check_with_tree st ((name, freshType) :: c))
+                     bind (type_check_with_tree st ((name,Typ freshType) :: c))
                           (fun (ty2,sub,retTree) ->
                             let newType = Arrow (substitute freshType sub, ty2) in
-                            let g = {ctxt = c; ter = Abs(name,st); ty = newType} in
+                            let g = {ctxt = c; ter = Abs(name,st); ty = Typ newType} in                            
                             let tree = Node (g,[substitute_in_tree retTree sub]) in
-                            Some (newType,sub,tree))
-  | Appl(t1,t2) -> let resT1 = type_check_with_tree t1 c in
-                   bind (resT1)
-                        (fun (typT1,sub1,retTree1) ->
-                          let newCtxt = List.map (fun (name,elem) -> (name,substitute elem sub1)) c in
-                          let resT2 = type_check_with_tree t2 newCtxt in
-                          bind (resT2)
-                               (fun (typT2,sub2,retTree2) ->
-                                 bind (type_check_with_tree t2 newCtxt)
-                                      (fun (typT2,sub2,retTree2) ->
-                                        let freshName = gensym () in
-                                        let subUnif = unify (Arrow (typT2, TVar(freshName))) (substitute typT1 sub2) in
-                                        let resType = try List.assoc freshName subUnif with _ -> TVar freshName in
-                                        let newSub = compsubst subUnif (compsubst sub2 sub1) in
-                                        (* Now constructing the tree node *)
-                                        let g = {ctxt = c; ter = Appl(t1,t2); ty = resType} in
-                                        let newTree1 = substitute_in_tree retTree1 newSub in
-                                        let newTree2 = substitute_in_tree retTree2 newSub in
-                                        let resTree = Node (g,[newTree1;newTree2]) in
-                                        Some (resType,newSub,resTree)
-                                      )
-                               )
-                        )
+                            Some (Arrow (substitute freshType sub, ty2),sub,tree))
 
-  | _ -> failwith "lol"
-       
+                          
+  | Appl (st1,st2) -> let freshName = gensym () in
+                      bind (type_check_with_tree st1 c)
+                           (fun (ty1,sub,retTree1) ->
+                             let newCtxt = List.map (fun (name,elem) -> (name,substitute_sigma elem sub)) c in
+                             bind (type_check_with_tree st2 newCtxt)
+                                  (fun (ty2,sub2,retTree2) -> 
+                                    let unification = unify (Arrow (ty2, TVar(freshName))) (substitute ty1 sub2) in
+                                    let resType = try List.assoc freshName unification with _ -> TVar freshName in
+                                    let newSub = (compsubst unification (compsubst sub2 sub)) in
+                                    (* Constructing tree node *)
+                                    let g = {ctxt = c; ter = Appl(st1,st2); ty = Typ resType} in 
+                                    let newTree1 = substitute_in_tree retTree1 newSub in 
+                                    let newTree2 = substitute_in_tree retTree2 newSub in 
+                                    let resTree = Node (g,[newTree1;newTree2]) in
+                                    Some (resType,newSub,resTree)))
+
+                           
+  | Let(name,st1,st2) -> bind (type_check_with_tree st1 c)
+                              (fun (ty1,sub,retTree) ->
+                                let genTy1 = generalyze ty1 (named_ctxt_to_ctxt c) in
+                                type_check_with_tree st2 ((name,genTy1) :: c))
+
+
+
+                           
+                                

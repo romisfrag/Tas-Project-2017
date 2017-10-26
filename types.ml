@@ -23,13 +23,16 @@ type named_contexte =
   (string * sigma) list
 
 type substitution =
+  (string * typ) list
+
+type substitutionSigma =
   (string * sigma) list
 
                  
 type goal =
   { ctxt :  named_contexte;
     ter : term ;
-    ty : sigma }
+    ty : typ }
 
 
     

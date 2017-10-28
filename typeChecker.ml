@@ -55,17 +55,25 @@ let rec substitute_sigma (s : sigma) (sub : substitution) : sigma =
 
                              
 (* Functions to determine freeVars of a term *)
-let rec get_var_type (ty: typ) : string list =
+let rec get_var_type_old (ty: typ) : string list =
   match ty with
   | TVar n -> [n]
-  | Arrow (t1,t2) -> (get_var_type t1) @ (get_var_type t2)
-  
+  | Arrow (t1,t2) -> (get_var_type_old t1) @ (get_var_type_old t2)
+
+
+                                               
 
 let substract l1 l2 =
   List.flatten (List.map (function id -> if (List.mem id l2)
                                          then []
                                          else [id])
-                         l1);;    
+                         l1)
+let rec get_var_type (ty: typ) : string list =
+  match ty with
+  | TVar n -> [n]
+  | Arrow (t1,t2) -> let vt2 = get_var_type t2 in
+                     (substract (get_var_type t1) vt2) @ vt2
+  
 let free_var_type (ty : typ) (l : string list) : string list =
   substract (get_var_type ty) l
 let rec free_vars_sigma_rec (s : sigma) (l : string list) : string list =

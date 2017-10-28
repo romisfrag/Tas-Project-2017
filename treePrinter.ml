@@ -45,7 +45,7 @@ let rec print_proof_tree (p : proofTree) : string =
                                    
                                      
                in
-               "\\frac{" ^  print_liste_tree l ^ "}{" ^ print_goal g ^ "}"
+               "\\cfrac{" ^  print_liste_tree l ^ "}{" ^ print_goal g ^ "}"
 
 
 

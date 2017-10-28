@@ -228,9 +228,13 @@ let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substituti
   match ter with
   (* Only seeking the var in the environment *)
   | Var n -> (try let (name,retTyG) = List.nth c n in 
-                  let retTy = instanciate retTyG in
-                  let g = {ctxt = c; ter = Var n; ty = Typ retTy} in
-                  let tree = Leaf g in
+                  let retTy = instanciate retTyG in                  
+                  let g = {ctxt = c; ter = Var n; ty = Typ retTy} in                  
+                  let tree = 
+                    if is_forall retTyG
+                    then let interG = {ctxt = c; ter = Var n; ty = retTyG} in
+                         Node(g,[Leaf interG])
+                    else Leaf g in
                   Some (retTy, [],tree) with
               | _ -> failwith "typeCheck Error : you must haven't give a close term")
 

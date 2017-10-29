@@ -25,11 +25,23 @@
       
       <p>This is a test page to my TAS project</p>
 
-<div class="form">
-  <label for="termField">Enter a term and we will type Check it </label><input type="text" id="terminpute" class="termField">
-  <input type="submit" value="Submit guess" class="guessSubmit">
-</div>
+      <!-- This div is the field responsible for the input of a term -->
+      <div class="form">
+	<label for="termField">Enter a term and we will type Check it </label><input type="text" id="terminpute" class="termField">
+	  <input type="submit" value="Submit guess" class="guessSubmit">
+    </div>
+    
+    <br/>
+    <br/>
+    <!-- Bottom button of termSamples -->
+	  <div class="termSamples">
+	    These are a few samples of term, click on it and it will automaticly put it into the buffer
+	    <br/>
+	    <input type="submit" value="True" class="trueButton">
+      <input type="submit" value="False" class="falseButton">
+    </div>
 
+<!--This script deals with the typeChecking and printing the result-->	    
 <script>
 
   
@@ -55,9 +67,27 @@
   //adding the listener of the submit button
   guessSubmit.addEventListener('click', termSubmit);
   guessSubmit.addEventListener('click', refresh);
-  
-  
+    
 </script>
+
+<!-- This script deal with the bottom buttons-->
+<script>
+  var trueButton = document.querySelector('.trueButton');
+  var termField = document.querySelector('.termField');
+  var falseButton = document.querySelector('.falseButton');
+
+  function addText(str){
+    termField.value = str;
+  }
+
+
+  trueButton.addEventListener('click',(function(){addText("true")}));
+  falseButton.addEventListener('click',function(){addText("false")});
+
+
+</script>
+
+
 </body>
 
 

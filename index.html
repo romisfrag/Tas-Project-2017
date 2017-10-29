@@ -43,18 +43,13 @@
 
 <!--This script deals with the typeChecking and printing the result-->	    
 <script>
-
-  
   var mainscreen = document.querySelector('.mainscreen');
   var termField = document.querySelector('.termField');
   var guessSubmit = document.querySelector('.guessSubmit');
-
   
   //function to import from 
   function termSubmit(){
-
   var arg = termField.value;
-  
   var res2 = (obj_typeur.affiche(arg));
   mainscreen.innerHTML += "$$" + res2 + "$$";
   }
@@ -67,8 +62,9 @@
   //adding the listener of the submit button
   guessSubmit.addEventListener('click', termSubmit);
   guessSubmit.addEventListener('click', refresh);
-    
 </script>
+
+
 
 <!-- This script deal with the bottom buttons-->
 <script>
@@ -76,14 +72,44 @@
   var termField = document.querySelector('.termField');
   var falseButton = document.querySelector('.falseButton');
 
-  function addText(str){
-    termField.value = str;
+  
+  //return 0 is no question mark and the indice if it exist
+  function isThereQuestion(str){
+    var indice = 0;
+    for(i = 0; i < str.length;i++){
+      if(str.charAt(i) == "?"){
+        indice = i;
+        break;
+      }
+    }
+    return indice;
   }
 
+  //replace the first questionMark occurence by the arg replacer  
+  function replaceIndice(str,replacer,indice){
+    var resStr = str.substring(0,indice) + replacer + str.substring(indice+1);
+    
+    return resStr;
+  }
 
-  trueButton.addEventListener('click',(function(){addText("true")}));
-  falseButton.addEventListener('click',function(){addText("false")});
+  function addText(str){
+    var indice = isThereQuestion(termField.value);
+    
+    if(indice != 0){
+      alert("lol");
+      termField.value = replaceIndice(termField.value,str,indice);
+    }else{
+      termField.value = str;
+    }
+  }
 
+  trueButton.addEventListener('click',(function(){addText("(lambda x (lambda y x))")}));
+  falseButton.addEventListener('click',function(){addText("(lambda x (lambda y y))")});
+
+</script>
+
+<script>
+  var termFiel = document.querySelector('.termField');
 
 </script>
 

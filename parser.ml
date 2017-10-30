@@ -28,6 +28,8 @@ let rec parse_term_rec (env : string list) (t : Sexplib.Sexp.t) : term =
   | Sexp.Atom var -> Var(get_number var env)
   | _ -> failwith ("Parseur unbound counstruction" ^ Sexp.to_string t ^ "\n")                                                 
 
-let parse_term (t : Sexplib.Sexp.t) : term =
+let parse_term_sexp (t : Sexplib.Sexp.t) : term =
   parse_term_rec [] t
-                  
+
+let parse_term (s : string) : term =
+  parse_term_sexp (Sexp.of_string s)

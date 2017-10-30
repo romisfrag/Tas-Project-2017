@@ -1,21 +1,21 @@
 all : script
 
 
-types.ml :
+types :
 	ocamlbuild -use-ocamlfind types.native
 
-parser.ml : types.ml
+parser : types
 	ocamlbuild -use-ocamlfind parser.native
 
 
-typeChecker.ml : types.ml
+typeChecker : types
 	ocamlbuild -use-ocamlfind typeChecker.native
 
-treePrinter.ml : types.ml
+treePrinter : types
 	ocamlbuild -use-ocamlfind treePrinter.native
 
 
-script.ml : typeChecker.ml treePrinter.ml parser.ml types.ml
+script : typeChecker treePrinter parser types
 	ocamlbuild -use-ocamlfind script.byte
 	js_of_ocaml script.byte
 

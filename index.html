@@ -5,7 +5,7 @@
   <head>
 
     
-    <title>Who wan't some TAS</title>
+    <title>Online Type Checker</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <script type="text/javascript" src="script.js"></script>
@@ -18,29 +18,43 @@
   </head>
 
  <body>
-      <h1>Type Printer</h1>
+      <h1>Online Type Checker</h1>
 
       <div class="mainscreen">
       </div> 
       
-      <p>This is a test page to my TAS project</p>
+      <p>Bienvenue sur le type checker en ligne </p>
 
       <!-- This div is the field responsible for the input of a term -->
       <div class="form">
-  <label for="termField">Enter a term and we will type Check it </label>
+  <label for="termField">Entrer un terme</label>
   <textarea class="termField" id="terminpute">
 
   </textarea>
   <!-- <input type="text" id="terminpute" class="termField">  -->
       <input type="submit" value="Submit guess" class="guessSubmit">
-    </div>
+      </div>
+      <div>
+	<h2> Syntaxe des termes </h2>
+	<p>
+	  La syntaxe est sous la forme de 
+	  <a href="https://fr.wikipedia.org/wiki/S-expression">S-expressions </a>.
+	  <br/>
+	  <h3> Exemples de termes </h3>
+	  $$\lambda x.x \rightarrow (lambda\ x\ x)$$
+	  $$let\ x = \lambda x.x\ in\ x \rightarrow (let\ x\ =\ (lambda\ x \ x)\ in\ x) $$
+	</p>
+      </div>
     
     <br/>
     <br/>
     <!-- Bottom button of termSamples -->
 	  <div class="termSamples">
-	    These are a few samples of term, click on it and it will automaticly put it into the buffer
+	    <h2>Termes Prédéfinis</h2>
 	    <br/>
+	    <p> Cliquez sur un terme pour que celui ci s'affiche dans la boite de texte</p>
+	    <p> Si un terme provoque l'affichage d'un "?" cela signifie que celui ci nécessite l'ajout de nouveaux termes, vous pouvez les remplacer
+	      manuellement ou alors en cliquant sur un nouveau terme prédéfini qui remplacera le "?" le plus à gauche </p>
 	    <input type="submit" value="True" class="trueButton">
 	      <input type="submit" value="False" class="falseButton">
 		<input type="submit" value="Ifte" class="ifteButton">
@@ -76,7 +90,7 @@
   var trueButton = document.querySelector('.trueButton');
   var termField = document.querySelector('.termField');
   var falseButton = document.querySelector('.falseButton');
-  var ifteButton = document.querySelector('.ifteButton);
+  var ifteButton = document.querySelector('.ifteButton');
   
   //return 0 is no question mark and the indice if it exist
   function isThereQuestion(str){

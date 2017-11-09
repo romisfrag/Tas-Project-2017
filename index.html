@@ -42,7 +42,8 @@
 	    These are a few samples of term, click on it and it will automaticly put it into the buffer
 	    <br/>
 	    <input type="submit" value="True" class="trueButton">
-      <input type="submit" value="False" class="falseButton">
+	      <input type="submit" value="False" class="falseButton">
+		<input type="submit" value="Ifte" class="ifteButton">
     </div>
 
 <!--This script deals with the typeChecking and printing the result-->	    
@@ -75,7 +76,7 @@
   var trueButton = document.querySelector('.trueButton');
   var termField = document.querySelector('.termField');
   var falseButton = document.querySelector('.falseButton');
-
+  var ifteButton = document.querySelector('.ifteButton);
   
   //return 0 is no question mark and the indice if it exist
   function isThereQuestion(str){
@@ -108,7 +109,8 @@
   }
 
   trueButton.addEventListener('click',(function(){addText("(lambda x (lambda y x))")}));
-  falseButton.addEventListener('click',function(){addText("(lambda x (lambda y y))")});
+		   falseButton.addEventListener('click',function(){addText("(lambda x (lambda y y))")});
+		     ifteButton.addEventListener('click',function(){addText("((? ?) ?)")});
 
 </script>
 

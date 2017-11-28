@@ -58,6 +58,9 @@
 	    <input type="submit" value="True" class="trueButton">
 	      <input type="submit" value="False" class="falseButton">
 		<input type="submit" value="Ifte" class="ifteButton">
+		  <input type="submit" value="K" class="kButton">
+		    <input type="submit" value="S" class="sButton">
+		      <input type="submit" value="I" class="iButton">
     </div>
 
 <!--This script deals with the typeChecking and printing the result-->	    
@@ -91,6 +94,9 @@
   var termField = document.querySelector('.termField');
   var falseButton = document.querySelector('.falseButton');
   var ifteButton = document.querySelector('.ifteButton');
+  var sButton = document.querySelector('.sButton');
+  var kButton = document.querySelector('.kButton');
+  var iButton = document.querySelector('.iButton');
   
   //return 0 is no question mark and the indice if it exist
   function isThereQuestion(str){
@@ -121,9 +127,12 @@
     }
   }
 
-  trueButton.addEventListener('click',(function(){addText("(lambda x (lambda y x))")}));
+		   trueButton.addEventListener('click',(function(){addText("(lambda x (lambda y x))")}));
 		   falseButton.addEventListener('click',function(){addText("(lambda x (lambda y y))")});
-		     ifteButton.addEventListener('click',function(){addText("((? ?) ?)")});
+		   ifteButton.addEventListener('click',function(){addText("((? ?) ?)")});
+		   iButton.addEventListener('click',function(){addText("(lambda x x)")});
+		   sButton.addEventListener('click',function(){addText("?")});
+		   kButton.addEventListener('click',function(){addText("?")});
 
 </script>
 

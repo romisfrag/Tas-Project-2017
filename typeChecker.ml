@@ -230,11 +230,7 @@ let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substituti
   | Var n -> (try let (name,retTyG) = List.nth c n in 
                   let retTy = instanciate retTyG in                  
                   let g = {ctxt = c; ter = Var n; ty = Typ retTy} in                  
-                  let tree = 
-                    if is_forall retTyG
-                    then let interG = {ctxt = c; ter = Var n; ty = retTyG} in
-                         Node(g,[Leaf interG])
-                    else Leaf g in
+                  let tree = Leaf g in
                   Some (retTy, [],tree) with
               | _ -> failwith "typeCheck Error : you must haven't give a close term")
 
@@ -271,14 +267,8 @@ let rec type_check_with_tree (ter : term) (c : named_contexte) : (typ*substituti
                                 bind (type_check_with_tree st2 ((name,genTy1) :: c))
                                      (fun (ty2,sub2,retTree2) ->
                                        (* typing is over but we need to make the tree *)
-                                       (* first we need to know if we were able to generalyze the type *)
-                                       let newTree1 =
-                                         let newTree1Temp = substitute_in_tree retTree1 sub1 in
-                                         (if is_forall genTy1
-                                          then let g = {ctxt = c; ter = st1; ty = genTy1} in
-                                               Node(g,[newTree1Temp])
-                                          else newTree1Temp) in
-                                          (* next we create the tree *)
+                                       let newTree1 = substitute_in_tree retTree1 sub1 in
+                                       (* next we create the tree *)
                                        let g = {ctxt = c; ter = Let(name,st1,st2); ty = Typ ty2} in
                                        let newTree2 = substitute_in_tree retTree2 sub2 in
                                        let resTree = Node (g,[newTree1;newTree2]) in
